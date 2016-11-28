@@ -96,7 +96,7 @@ int main(){
         imprimeListaPontos( lista );
     }while (opc != '6');
 
-    printf("\nfim do programa\n");
+    printf("\nsessão encerrada\n");
     
     // libera a lista de pontos
     Desaloca(lista);
@@ -163,7 +163,7 @@ void insereFinal( TListaPonto *lista, TPonto p){
 // insere ponto no local escolhido pelo usuário REVISAR!!!
 void inserePonto(TListaPonto*lista, TPonto p, int x){
 	if(lista->qtdAtual < lista->maximo){
-		if(x > 1000 || x > lista->qtdAtual){
+		if(x < 0 || x > 1000 || x > lista->qtdAtual){
 			printf("Impossível inserir ponto na posicao %d\n", x);
 		} else if(lista->qtdAtual == 0){
 			lista->elementos[x] = p;
@@ -194,11 +194,24 @@ void removePonto(TListaPonto*lista, int x){
 void imprimeListaPontos( TListaPonto *lista ){
     int i;
     for(i=0;i<lista->qtdAtual;i++)
-        printf("(%d,%d) ", lista->elementos[i].x,lista->elementos[i].y);
+        printf("\n(%d,%d) ", lista->elementos[i].x,lista->elementos[i].y);
     printf("\n\n");
 }
 
 // calcula distância
 void distPonto(TListaPonto*lista, TCalcDist*listaR, TPonto p, int K){
-   
+    /*int N = 1000;
+    int i, j;
+    float distancia;
+    listaR->resposta[0].z = 1000;
+    for(i=0; i<lista->qtdAtual; i++){
+        distancia = sqrt(pow(p.x - lista->elementos[i].x,2)+pow(p.y - lista->elementos[i].y,2));
+        for(j=0; j>K; j++){
+            if(distancia > 0 && distancia < listaR->resposta[j].z){
+                listaR->resposta[j].x = lista->elementos[i].x;
+                listaR->resposta[j].y = lista->elementos[i].y;
+            }
+        }
+    }
+    printf("\n(%d,%d)\n", listaR->resposta[j].x, listaR->resposta[j].y);*/
 }
