@@ -15,7 +15,7 @@ typedef struct{
 
 // declaracao do TAD TListaPonto
 typedef struct{
-    TPonto*elementos; // vetor de pontos
+    TPonto *elementos; // vetor de pontos
     int maximo; // quantidade maxima de pontos no vetor de pontos
     int qtdAtual; // quantidade atual de pontos no vetor de pontos
 }TListaPonto;
@@ -199,19 +199,37 @@ void imprimeListaPontos( TListaPonto *lista ){
 }
 
 // calcula distância
-void distPonto(TListaPonto*lista, TCalcDist*listaR, TPonto p, int K){
-    /*int N = 1000;
-    int i, j;
-    float distancia;
-    listaR->resposta[0].z = 1000;
-    for(i=0; i<lista->qtdAtual; i++){
-        distancia = sqrt(pow(p.x - lista->elementos[i].x,2)+pow(p.y - lista->elementos[i].y,2));
-        for(j=0; j>K; j++){
-            if(distancia > 0 && distancia < listaR->resposta[j].z){
-                listaR->resposta[j].x = lista->elementos[i].x;
-                listaR->resposta[j].y = lista->elementos[i].y;
+TListaPonto * distPonto(TListaPonto *lista, TPonto p, int K){
+
+    TListaPonto *kPontosProx;
+
+    kPontosProx = Init( K+1);
+
+    float *AuxDistancias = (float *) calloc( K+1, sizeof(float));
+
+    int contK=0, i;
+
+
+    for( i = 0; i < lista->qtdAtual; i++){
+        // calcula a distancia do ponto p para todos pontos lista->elementos[i];
+        TPonto pAux = lista->elementos[i];
+
+        float distancia = CalculaDistancia( p, pAux);
+
+        for( j=kPontosProx->qtdAtual-1; j>=0; j--){
+            if( distancia < AuxDistancias[j]){
+                AuxDistancias[j+1] = AuxDistancias[j];
+                kPontosProx->elementos[j+1] = kPontosProx->elementos[j];        
             }
+
         }
+        AuxDistancias[j+1] = distancia;
+        kPontosProx->elementos[j+1] = pAux;
+        if(kPontosProx->qtdAtual<K)
+            (kPontosProx->qtdAtual)++;  
+
+
     }
-    printf("\n(%d,%d)\n", listaR->resposta[j].x, listaR->resposta[j].y);*/
+    free( AuxDistancias );
+    return kPontosProx;
 }
