@@ -42,9 +42,37 @@ int main(){
     TListaPonto *lista;
     TCalcDist *listaR;
     char opc;
+    int i;
 
     lista = Init( 1000 ); //cria um vetor de pontos com 1000 posicoes
 
+    // arquivo para leitura
+    // abrindo um arquivo para leitura
+    FILE *fpo = fopen("entrada.mkd","r");
+
+    if( !fpo ){
+        printf("falha na abertura do arquivo\n");
+        exit(1);
+    }
+
+    // le a quantidade de numeros no arquivo
+    fscanf(fpo,"%d", &lista->qtdAtual);
+
+    // le os pontos salvos no arquivo
+    for(i=0; i<lista->qtdAtual; i++){
+        fscanf(fpo,"%d,%d", &lista->elementos[i].x, &lista->elementos[i].y);
+    }
+
+    // fecha arquivo
+    fclose(fpo);
+    
+    if(lista->qtdAtual > 0){
+        printf("pontos armazenados:");
+        for(i=0; i<lista->qtdAtual; i++)
+            printf("(%d,%d)", lista->elementos[i].x, lista->elementos[i].y);
+        printf("\n\n");
+    }
+    // arquivo para leitura
 
     // faz o menu de opcoes
     do{
@@ -95,6 +123,25 @@ int main(){
         }
         imprimeListaPontos( lista );
     }while (opc != '6');
+
+    // arquivo para escrita
+    // abrindo um arquivo para escrita
+    FILE *fpc = fopen("entrada.mkd","w");
+
+    if( !fpc ){
+        printf("falha na abertura do arquivo\n");
+        exit(1);
+    }
+
+    // le a quantidade de numeros no arquivo
+    fprintf(fpc,"%d\n", lista->qtdAtual);
+
+    for(i=0; i < lista->qtdAtual;i++)
+        fprintf(fpc,"%d,%d ", lista->elementos[i].x, lista->elementos[i].y);
+
+    // ao final, sempre devo fechar o arquivo
+    fclose(fpc);
+    // arquivo para escrita
 
     printf("\nsessão encerrada\n");
     
@@ -205,44 +252,50 @@ void imprimeListaPontos( TListaPonto *lista ){
 void distPonto(TListaPonto*lista, TCalcDist*listaR, TPonto p, int K){
     int i, j;
     float distancia, aux_x, aux_y, aux_z;
-    // passa os pontos do vetor elementos para o vetor resposta
-    for(i=0; i<lista->qtdAtual; i++){
-        listaR->resposta[i].x = lista->elementos[i].x;
-        listaR->resposta[i].y = lista->elementos[i].y;
-    }
-    // faz o calculo da distancia dos pontos ao ponto referência
-    // também armazena a resposta na posição z do vetor resposta
-    for(i=0; i<lista->qtdAtual; i++){
-        distancia = sqrt(pow(p.x - lista->elementos[i].x,2)+pow(p.y - lista->elementos[i].y,2));
-        listaR->resposta[i].z = distancia;
-    }
-    // ordena vetor resposta a partir do float z
-    for(i=0; i<lista->qtdAtual-1; i++){
-        for(j=0; j<lista->qtdAtual-1; j++){
-            if(listaR->resposta[j].z > listaR->resposta[j+1].z){
 
-                //organiza Z
-                aux_z = listaR->resposta[j].z;
-                listaR->resposta[j].z = listaR->resposta[j+1].z;
-                listaR->resposta[j+1].z = aux_z;
+    if(K > lista->qtdAtual){
+        printf("\nimpossivel realizar calculo!\n\n");
+    }else{
+        // passa os pontos do vetor elementos para o vetor resposta
+        for(i=0; i<lista->qtdAtual; i++){
+            listaR->resposta[i].x = lista->elementos[i].x;
+            listaR->resposta[i].y = lista->elementos[i].y;
+        }
+        // faz o calculo da distancia dos pontos ao ponto referência
+        // também armazena a resposta na posição z do vetor resposta
+        for(i=0; i<lista->qtdAtual; i++){
+            distancia = sqrt(pow(p.x - lista->elementos[i].x,2)+pow(p.y - lista->elementos[i].y,2));
+            listaR->resposta[i].z = distancia;
+        }
+        // ordena vetor resposta a partir do float z
+        for(i=0; i<lista->qtdAtual-1; i++){
+            for(j=0; j<lista->qtdAtual-1; j++){
+                if(listaR->resposta[j].z > listaR->resposta[j+1].z){
 
-                //organiza X
-                aux_x = listaR->resposta[j].x;
-                listaR->resposta[j].x = listaR->resposta[j+1].x;
-                listaR->resposta[j+1].x = aux_x;
+                    //organiza Z
+                    aux_z = listaR->resposta[j].z;
+                    listaR->resposta[j].z = listaR->resposta[j+1].z;
+                    listaR->resposta[j+1].z = aux_z;
 
-                //organiza Y
-                aux_y = listaR->resposta[j].y;
-                listaR->resposta[j].y = listaR->resposta[j+1].y;
-                listaR->resposta[j+1].y = aux_y;
+                    //organiza X
+                    aux_x = listaR->resposta[j].x;
+                    listaR->resposta[j].x = listaR->resposta[j+1].x;
+                    listaR->resposta[j+1].x = aux_x;
+
+                    //organiza Y
+                    aux_y = listaR->resposta[j].y;
+                    listaR->resposta[j].y = listaR->resposta[j+1].y;
+                    listaR->resposta[j+1].y = aux_y;
+                }
             }
         }
-    }
 
-    // imprime pontos mais próximos
-    printf("pontos mais próximos de (%d,%d): ", p.x, p.y);
-    for(i=0; i<K; i++){
-        printf("(%d,%d) ", listaR->resposta[i].x, listaR->resposta[i].y);
+
+        // imprime pontos mais próximos
+        printf("\npontos mais próximos de (%d,%d) respectivamente: ", p.x, p.y);
+        for(i=0; i<K; i++){
+            printf("(%d,%d) ", listaR->resposta[i].x, listaR->resposta[i].y);
+        }
+        printf("\n\n");
     }
-    printf("\n\n");
 }
