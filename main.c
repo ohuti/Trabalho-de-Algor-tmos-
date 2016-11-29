@@ -160,7 +160,7 @@ void insereFinal( TListaPonto *lista, TPonto p){
 
 }
 
-// insere ponto no local escolhido pelo usuário REVISAR!!!
+// insere ponto no local escolhido pelo usuário 
 void inserePonto(TListaPonto*lista, TPonto p, int x){
 	if(lista->qtdAtual < lista->maximo){
 		if(x < 0 || x > 1000 || x > lista->qtdAtual){
@@ -180,7 +180,9 @@ void inserePonto(TListaPonto*lista, TPonto p, int x){
 
 // remove ponto da posição solicitada
 void removePonto(TListaPonto*lista, int x){
-	if(x == lista->qtdAtual){
+	if(x > lista->qtdAtual || x < 0){
+        printf("Impossível remover ponto da posição %d\n", x);
+    } else if(x == lista->qtdAtual){
 		(lista->qtdAtual)--;
 	} else {
 		for(int i = x+1; i < lista->qtdAtual; i++){
@@ -217,22 +219,22 @@ void distPonto(TListaPonto*lista, TCalcDist*listaR, TPonto p, int K){
     // ordena vetor resposta a partir do float z
     for(i=0; i<lista->qtdAtual-1; i++){
         for(j=0; j<lista->qtdAtual-1; j++){
-            if(listaR->resposta[i].z > listaR->resposta[i+1].z){
+            if(listaR->resposta[j].z > listaR->resposta[j+1].z){
 
                 //organiza Z
-                aux_z = listaR->resposta[i].z;
-                listaR->resposta[i].z = listaR->resposta[i+1].z;
-                listaR->resposta[i+1].z = aux_z;
+                aux_z = listaR->resposta[j].z;
+                listaR->resposta[j].z = listaR->resposta[j+1].z;
+                listaR->resposta[j+1].z = aux_z;
 
                 //organiza X
-                aux_x = listaR->resposta[i].x;
-                listaR->resposta[i].x = listaR->resposta[i+1].x;
-                listaR->resposta[i+1].x = aux_x;
+                aux_x = listaR->resposta[j].x;
+                listaR->resposta[j].x = listaR->resposta[j+1].x;
+                listaR->resposta[j+1].x = aux_x;
 
                 //organiza Y
-                aux_y = listaR->resposta[i].y;
-                listaR->resposta[i].y = listaR->resposta[i+1].y;
-                listaR->resposta[i+1].y = aux_y;
+                aux_y = listaR->resposta[j].y;
+                listaR->resposta[j].y = listaR->resposta[j+1].y;
+                listaR->resposta[j+1].y = aux_y;
             }
         }
     }
