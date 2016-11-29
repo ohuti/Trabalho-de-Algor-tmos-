@@ -7,7 +7,7 @@ typedef struct{
     int x, y;
 }TPonto;
 
-// TAD ponto mais perto da referÃªncia
+// TAD ponto mais perto da referência
 typedef struct{
     int x, y;
     float z;
@@ -20,7 +20,7 @@ typedef struct{
     int qtdAtual; // quantidade atual de pontos no vetor de pontos
 }TListaPonto;
 
-// declaÃ§Ã£o do TAD TCalcDist
+// declação do TAD TCalcDist
 typedef struct{
     RPonto*resposta; // vetor resposta
 }TCalcDist;
@@ -48,7 +48,7 @@ int main(){
 
     // arquivo para leitura
     // abrindo um arquivo para leitura
-    FILE *fpo = fopen("entrada.mkd","r");
+    FILE *fpo = fopen("entrada.txt","r");
 
     if( !fpo ){
         printf("falha na abertura do arquivo\n");
@@ -65,7 +65,7 @@ int main(){
 
     // fecha arquivo
     fclose(fpo);
-    
+
     if(lista->qtdAtual > 0){
         printf("pontos armazenados:");
         for(i=0; i<lista->qtdAtual; i++)
@@ -126,7 +126,7 @@ int main(){
 
     // arquivo para escrita
     // abrindo um arquivo para escrita
-    FILE *fpc = fopen("entrada.mkd","w");
+    FILE *fpc = fopen("entrada.txt","w");
 
     if( !fpc ){
         printf("falha na abertura do arquivo\n");
@@ -143,13 +143,13 @@ int main(){
     fclose(fpc);
     // arquivo para escrita
 
-    printf("\nsessÃ£o encerrada\n");
-    
+    printf("\nsessão encerrada\n");
+
     // libera a lista de pontos
     Desaloca(lista);
 
 }
-// FunÃ§Ã£o cria e devolve uma nova estrutura TListaPontos, inicializa os atributos da estrutura.
+// Função cria e devolve uma nova estrutura TListaPontos, inicializa os atributos da estrutura.
 TListaPonto *Init( int N ){
 
     TListaPonto *lista;
@@ -164,20 +164,20 @@ TListaPonto *Init( int N ){
     return lista;
 }
 
-// FunÃ§Ã£o cria lista para vetor resposta do calculo de distÃ¢ncia.
+// Função cria lista para vetor resposta do calculo de distância.
 TCalcDist *CInit(int K){
 
     TCalcDist*listaR;
 
     listaR = (TCalcDist*) calloc(1,sizeof(TCalcDist));
 
-    // aloca um vetor para armazenar pontos mais prÃ³ximos do ponto referÃªncia
+    // aloca um vetor para armazenar pontos mais próximos do ponto referência
     listaR->resposta = (RPonto*) calloc(K,sizeof(RPonto));
 
     return listaR;
 }
 
-// FunÃ§Ã£o desaloca a memoria utilizada por *listaPonto
+// Função desaloca a memoria utilizada por *listaPonto
 void Desaloca( TListaPonto *lista){
     // libera o vetor
     free(lista->elementos);
@@ -185,7 +185,7 @@ void Desaloca( TListaPonto *lista){
     free(lista);
 }
 
-// FunÃ§Ã£o desaloca a memoria utilizada por *CalcDist
+// Função desaloca a memoria utilizada por *CalcDist
 void desalocaR(TCalcDist*listaR){
     // libera o vetor resposta
     free(listaR->resposta);
@@ -207,17 +207,17 @@ void insereFinal( TListaPonto *lista, TPonto p){
 
 }
 
-// insere ponto no local escolhido pelo usuÃ¡rio 
+// insere ponto no local escolhido pelo usuário
 void inserePonto(TListaPonto*lista, TPonto p, int x){
 	if(lista->qtdAtual < lista->maximo){
 		if(x < 0 || x > 1000 || x > lista->qtdAtual){
-			printf("ImpossÃ­vel inserir ponto na posicao %d\n", x);
+			printf("Impossível inserir ponto na posicao %d\n", x);
 		} else if(lista->qtdAtual == 0){
 			lista->elementos[x] = p;
 			(lista->qtdAtual)++;
 		} else if(lista->qtdAtual > 0){
             for(int i = lista->qtdAtual; i >= x; i--){
-				lista->elementos[i+1] = lista->elementos[i];			 
+				lista->elementos[i+1] = lista->elementos[i];
             }
             lista->elementos[x] = p;
             (lista->qtdAtual)++;
@@ -225,10 +225,10 @@ void inserePonto(TListaPonto*lista, TPonto p, int x){
 	}
 }
 
-// remove ponto da posiÃ§Ã£o solicitada
+// remove ponto da posição solicitada
 void removePonto(TListaPonto*lista, int x){
 	if(x > lista->qtdAtual || x < 0){
-        printf("ImpossÃ­vel remover ponto da posiÃ§Ã£o %d\n", x);
+        printf("Impossível remover ponto da posição %d\n", x);
     } else if(x == lista->qtdAtual){
 		(lista->qtdAtual)--;
 	} else {
@@ -248,7 +248,7 @@ void imprimeListaPontos( TListaPonto *lista ){
     printf("\n\n");
 }
 
-// calcula distÃ¢ncia
+// calcula distância
 void distPonto(TListaPonto*lista, TCalcDist*listaR, TPonto p, int K){
     int i, j;
     float distancia, aux_x, aux_y, aux_z;
@@ -261,8 +261,8 @@ void distPonto(TListaPonto*lista, TCalcDist*listaR, TPonto p, int K){
             listaR->resposta[i].x = lista->elementos[i].x;
             listaR->resposta[i].y = lista->elementos[i].y;
         }
-        // faz o calculo da distancia dos pontos ao ponto referÃªncia
-        // tambÃ©m armazena a resposta na posiÃ§Ã£o z do vetor resposta
+        // faz o calculo da distancia dos pontos ao ponto referência
+        // também armazena a resposta na posição z do vetor resposta
         for(i=0; i<lista->qtdAtual; i++){
             distancia = sqrt(pow(p.x - lista->elementos[i].x,2)+pow(p.y - lista->elementos[i].y,2));
             listaR->resposta[i].z = distancia;
@@ -291,8 +291,8 @@ void distPonto(TListaPonto*lista, TCalcDist*listaR, TPonto p, int K){
         }
 
 
-        // imprime pontos mais prÃ³ximos
-        printf("\npontos mais prÃ³ximos de (%d,%d) respectivamente: ", p.x, p.y);
+        // imprime pontos mais próximos
+        printf("\npontos mais proximos de (%d,%d) respectivamente: ", p.x, p.y);
         for(i=0; i<K; i++){
             printf("(%d,%d) ", listaR->resposta[i].x, listaR->resposta[i].y);
         }
